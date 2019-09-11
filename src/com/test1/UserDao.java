@@ -1,4 +1,6 @@
-package com;
+package com.test1;
+
+import com.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,11 +22,11 @@ public class UserDao {
 
     public static void main(String[] args) {
 //        List<User> list = select();
-////        for (User user : list) {
-////            System.out.println(user);
-////        }
-
-        User user = new User(4, "bbb", "111");
+//        for (User user : list) {
+//            System.out.println(user);
+//        }
+//
+//        User user = new User(4, "bbb", "111");
 //        save(user);
 //        update(user);
 //        delete(user);

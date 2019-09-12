@@ -26,10 +26,110 @@ public class UserDao {
 //            System.out.println(user);
 //        }
 //
-//        User user = new User(4, "bbb", "111");
+//        User user = new User(4, "马云", "123");
 //        save(user);
 //        update(user);
 //        delete(user);
+    }
+
+    public static List<User> select() {
+        List<User> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        try {
+            //注册数据库驱动
+            Class.forName(DRIVER);
+            //获取连接
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "select * from user";
+            //实例化PreparedStatement对象
+            stat = conn.prepareStatement(sql);
+            //获取返回结果集
+            rs = stat.executeQuery();
+            User user = null;
+            while (rs.next()) {
+                user = new User();
+                Integer id = rs.getInt("id");
+                String name = rs.getString("name");
+                String ps = rs.getString("password");
+                user.setId(id);
+                user.setName(name);
+                user.setPassword(ps);
+                list.add(user);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //关闭资源 先开后关，后开先关
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stat != null) {
+                try {
+                    stat.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return list;
+    }
+
+    public static void save(User user) {
+        Connection conn = null;
+        PreparedStatement stat = null;
+        try {
+            Class.forName(DRIVER);
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "insert into user (id,name,password) values(null,?,?)";
+            stat = conn.prepareStatement(sql);
+            stat.setObject(1, user.getName());
+            stat.setObject(2, user.getPassword());
+            int reslut = stat.executeUpdate();
+            if (reslut > 0) {
+                System.out.println("添加成功！");
+            } else {
+                System.out.println("添加失败！");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stat != null) {
+                try {
+                    stat.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     public static void delete(User user) {
@@ -44,6 +144,8 @@ public class UserDao {
             stat.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            //关闭资源
         }
 
     }
@@ -62,65 +164,9 @@ public class UserDao {
             stat.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-    }
-
-    public static void save(User user) {
-        Connection conn = null;
-        PreparedStatement stat = null;
-        try {
-            Class.forName(DRIVER);
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            String sql = "insert into user (id,name,password) values(null,?,?)";
-            stat = conn.prepareStatement(sql);
-            stat.setObject(1, user.getName());
-            stat.setObject(2, user.getPassword());
-            stat.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static List<User> select() {
-        List<User> list = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement stat = null;
-        try {
-            //注册数据库驱动
-            Class.forName(DRIVER);
-            //获取连接
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            String sql = "select * from user";
-            //实例化PreparedStatement对象
-            stat = conn.prepareStatement(sql);
-            ResultSet rs = stat.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                Integer id = rs.getInt("id");
-                String name = rs.getString("name");
-                String ps = rs.getString("password");
-                user.setId(id);
-                user.setName(name);
-                user.setPassword(ps);
-                list.add(user);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
-            try {
-                //关闭连接
-                if (stat != null) {
-                    stat.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            //关闭资源
         }
-        return list;
+
     }
 }

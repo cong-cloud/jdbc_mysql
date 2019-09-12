@@ -32,34 +32,94 @@ public class DbUtil2 {
         } catch (SQLException e) {
             System.out.println("连接数据库获取连接失败！");
             e.printStackTrace();
-
         }
         return conn;
 
     }
 
-    /**
-     * @param [resultSet, state, conn]
-     * @return void
-     * @date 2019/9/11
-     * @description 关闭资源
-     */
-    public static void close(ResultSet resultSet, PreparedStatement state, Connection conn) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (state != null) {
-                state.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("关闭失败！");
-            e.printStackTrace();
-        }
+    public static void getStateDQL() {
 
     }
+
+    /**
+     * @param [sql, obj]
+     * @return java.sql.PreparedStatement
+     * @date 2019/9/12
+     * @description 添加，删除，修改
+     */
+    public static PreparedStatement getStateDML(String sql, Object... obj) {
+        if (sql == null || sql == "") {
+            return null;
+        }
+        PreparedStatement state = null;
+        try {
+            Connection conn = getConn();
+            state = conn.prepareStatement(sql);
+            if (obj != null) {
+                int index = 1;
+                for (Object o : obj) {
+                    state.setObject(index, o);
+                    index++;
+                }
+            }
+            state.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return state;
+    }
+
+    public static void close(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void close(PreparedStatement state, Connection conn) {
+        if (state != null) {
+            try {
+                state.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void close(ResultSet rs, PreparedStatement state, Connection conn) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (state != null) {
+            try {
+                state.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }

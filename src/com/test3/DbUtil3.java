@@ -38,7 +38,7 @@ public class DbUtil3 {
      * @description 获取连接
      */
     public static Connection getConn() {
-        DbUtil3 dbUtil = new DbUtil3();
+        new DbUtil3();
         Connection conn = null;
         try {
             Class.forName(driver);
@@ -49,34 +49,8 @@ public class DbUtil3 {
         } catch (SQLException e) {
             System.out.println("连接数据库获取连接失败！");
             e.printStackTrace();
-
         }
         return conn;
-
-    }
-
-    /**
-     * @param [resultSet, state, conn]
-     * @return void
-     * @date 2019/9/11
-     * @description 关闭资源
-     */
-    public static void close(ResultSet resultSet, PreparedStatement state, Connection conn) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (state != null) {
-                state.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("关闭失败！");
-            e.printStackTrace();
-        }
-
     }
 
 }

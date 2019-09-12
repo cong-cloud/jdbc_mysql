@@ -8,8 +8,20 @@ package com;
  * @decription
  */
 public class User {
+
+    /**
+     * 主键id
+     */
     private Integer id;
+
+    /**
+     * 姓名
+     */
     private String name;
+
+    /**
+     * 密码
+     */
     private String password;
 
     public User() {
